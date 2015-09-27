@@ -130,8 +130,9 @@ if 1:
 
     if 1: #ログインが確認できたら
         field = cgi.FieldStorage()
-        name = field.getfirst("name", "")
-        date = field.getfirst("datepicker", changeDatetimeToString(datetime.now, 3))
+        name = cgi.escape(field.getfirst("name", ""), True)
+        date = cgi.escape(field.getfirst("datepicker", changeDatetimeToString(datetime.now, 3)),
+                          True)
 
         try: #人の名前を削除
             name_list = kaitou()

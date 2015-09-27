@@ -35,8 +35,8 @@ login_page = '''Content-Type: text/html
 
 
 f = cgi.FieldStorage()
-username = f.getfirst("username", "")
-password = f.getfirst("password", "")
+username = cgi.escape(f.getfirst("username", ""),True)
+password = cgi.escape(f.getfirst("password", ""),True)
 
 
 if username != USERNAME or password != PASSWORD:
