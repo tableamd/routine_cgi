@@ -1,6 +1,8 @@
 #!/usr/local/bin/python
 #coding:utf-8
 
+from __future__ import with_statement
+import fcntl
 import cgi
 import cgitb
 import os
@@ -25,16 +27,19 @@ def changeDatetimeToString(date,num):
     else:
         return "%s/%s/%s/%s/%s/%s"%(y,m,d,h,mi,s)
 
-def kaitou():
-    f = open(DBFILE,"r")
-    name_list = pickle.load(f)
-    f.close()
+def kaitou(filename):
+    #排他制御
+    with open(filename,"r") as l_file:
+        fcntl.flock(l_file.fileno(), fcntl.LOCK_EX)
+        name_list = pickle.load(l_file)
+
     return name_list
 
-def kakikomi(list_name):
-    f = open(DBFILE,"w")
-    pickle.dump(list_name, f)
-    f.close()
+def kakikomi(dict_name):
+    #排他制御
+    with open(DBFILE,"w") as l_file:
+        fcntl.flock(l_file.fileno(), fcntl.LOCK_EX)
+        pickle.dump(dict_name, f)
 
 def returnNames(name_list):
     tmp = ""

@@ -1,6 +1,8 @@
 #!/usr/local/bin/python
 #coding:utf-8
 
+from __future__ import with_statement
+import fcntl
 import cgitb
 import os
 cgitb.enable()
@@ -13,9 +15,11 @@ NAME_DBFILE = "cgi-bin/name_file.dump"
 ROUTINE_DBFILE = "cgi-bin/routine_file.dump"
 
 def kaitou(filename):
-    f = open(filename,"r")
-    name_list = pickle.load(f)
-    f.close()
+    #排他制御
+    with open(filename,"r") as l_file:
+        fcntl.flock(l_file.fileno(), fcntl.LOCK_EX)
+        name_list = pickle.load(l_file)
+
     return name_list
 
 def changeStringToDatetime(str_data):
